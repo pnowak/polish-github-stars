@@ -1,0 +1,35 @@
+{
+  "name": "polish github stars",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-latest": "^6.16.0",
+    "webpack": "^1.13.3",
+    "webpack-livereload-plugin": "^0.9.0"
+    "eslint": "^3.8.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-loader": "^1.6.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+  },
+  "scripts": {
+    "lint": "eslint **/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pnowak/polish-github-stars"
+  },
+  "keywords": [
+    "polish",
+    "github",
+    "stars"
+  ],
+  "author": "pnowak",
+  "license": "ISC"
+}
