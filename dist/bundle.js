@@ -54,15 +54,22 @@
 
 	var _json2 = _interopRequireDefault(_json);
 
+	var _users = __webpack_require__(3);
+
+	var _users2 = _interopRequireDefault(_users);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var loc = 'https://api.github.com/search/users?q=location:poland';
 	var stars = 'https://api.github.com/search/repositories?q=stars:%3E100&order=desc';
 
 	fetch(stars).then(_status2.default).then(_json2.default).then(function (data) {
-	  console.log(data);
+	    var users = (0, _users2.default)(data);
+	    return users;
+	}).then(function (users) {
+	    console.log(users);
 	}).catch(function (error) {
-	  console.log('Request failed', error);
+	    console.log('Request failed', error);
 	});
 
 /***/ },
@@ -98,6 +105,33 @@
 	}
 
 	exports.default = json;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	function filterUsers(data) {
+		var users = data.items.filter(function (item, index) {
+			for (var i in item) {
+				if (i === 'owner') {
+					for (var j in item[i]) {
+						if (j === 'type' && item[i][j] === 'User') {
+							return item[i];
+						}
+					}
+				}
+			}
+		});
+
+		return users;
+	}
+
+	exports.default = filterUsers;
 
 /***/ }
 /******/ ]);
