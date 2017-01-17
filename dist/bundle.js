@@ -54,20 +54,27 @@
 
 	var _json2 = _interopRequireDefault(_json);
 
-	var _users = __webpack_require__(3);
+	var _urls = __webpack_require__(3);
 
-	var _users2 = _interopRequireDefault(_users);
+	var _urls2 = _interopRequireDefault(_urls);
+
+	var _fetchUrls = __webpack_require__(4);
+
+	var _fetchUrls2 = _interopRequireDefault(_fetchUrls);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var loc = 'https://api.github.com/search/users?q=location:poland';
 	var stars = 'https://api.github.com/search/repositories?q=stars:%3E100&order=desc';
 
-	fetch(stars).then(_status2.default).then(_json2.default).then(function (data) {
-	    var users = (0, _users2.default)(data);
-	    return users;
-	}).then(function (users) {
-	    console.log(users);
+	fetch(loc).then(_status2.default).then(_json2.default).then(function (data) {
+	    var url = (0, _urls2.default)(data);
+	    return url;
+	}).then(function (url) {
+	    var fetchUrl = (0, _fetchUrls2.default)(url);
+	    return fetchUrl;
+	}).then(function (fetchUrl) {
+	    console.log(fetchUrl);
 	}).catch(function (error) {
 	    console.log('Request failed', error);
 	});
@@ -115,23 +122,49 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	function filterUsers(data) {
-		var users = data.items.filter(function (item, index) {
+	function urls(data) {
+		var urlsArray = [];
+
+		data.items.filter(function (item, index) {
 			for (var i in item) {
-				if (i === 'owner') {
-					for (var j in item[i]) {
-						if (j === 'type' && item[i][j] === 'User') {
-							return item[i];
-						}
-					}
+				if (i === 'url') {
+					urlsArray.push(item[i]);
 				}
 			}
 		});
 
-		return users;
+		return urlsArray;
 	}
 
-	exports.default = filterUsers;
+	exports.default = urls;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _status = __webpack_require__(1);
+
+	var _status2 = _interopRequireDefault(_status);
+
+	var _json = __webpack_require__(2);
+
+	var _json2 = _interopRequireDefault(_json);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function fetchUrls(data) {
+		return data.forEach(function (url, index) {
+			fetch(url);
+		});
+	}
+
+	exports.default = fetchUrls;
 
 /***/ }
 /******/ ]);

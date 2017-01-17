@@ -2,20 +2,25 @@
 
 import status from './src/status';
 import json from './src/json';
-import filterUsers from './src/users';
+import urls from './src/urls';
+import fetchUrls from './src/fetchUrls';
 
 const loc = 'https://api.github.com/search/users?q=location:poland';
 const stars = 'https://api.github.com/search/repositories?q=stars:%3E100&order=desc';
 
-fetch(stars)
+fetch(loc)
     .then(status)
     .then(json)
     .then(function (data) {
-        const users = filterUsers(data);
-        return users;
+        const url = urls(data);
+        return url;
     })
-    .then(function (users) {
-    	console.log(users);
+    .then(function (url) {
+    	const fetchUrl = fetchUrls(url);
+        return fetchUrl;
+    })
+    .then(function (fetchUrl) {
+        console.log(fetchUrl);
     })
     .catch(function(error) {
       	console.log('Request failed', error);
