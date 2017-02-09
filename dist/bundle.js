@@ -46,75 +46,37 @@
 
 	'use strict';
 
-	var _status = __webpack_require__(1);
-
-	var _status2 = _interopRequireDefault(_status);
-
-	var _json = __webpack_require__(2);
-
-	var _json2 = _interopRequireDefault(_json);
-
-	var _urls = __webpack_require__(3);
+	var _urls = __webpack_require__(1);
 
 	var _urls2 = _interopRequireDefault(_urls);
 
-	var _fetchUrls = __webpack_require__(4);
+	var _users = __webpack_require__(2);
 
-	var _fetchUrls2 = _interopRequireDefault(_fetchUrls);
+	var _users2 = _interopRequireDefault(_users);
+
+	var _get = __webpack_require__(3);
+
+	var _get2 = _interopRequireDefault(_get);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var loc = 'https://api.github.com/search/users?q=location:poland';
 	var stars = 'https://api.github.com/search/repositories?q=stars:%3E100&order=desc';
 
-	fetch(loc).then(_status2.default).then(_json2.default).then(function (data) {
+	(0, _get2.default)(loc).then(function (data) {
 	    var url = (0, _urls2.default)(data);
 	    return url;
 	}).then(function (url) {
-	    var fetchUrl = (0, _fetchUrls2.default)(url);
-	    return fetchUrl;
-	}).then(function (fetchUrl) {
-	    console.log(fetchUrl);
+	    var user = (0, _users2.default)(url);
+	    return user;
+	}).then(function (user) {
+	    console.log(user);
 	}).catch(function (error) {
 	    console.log('Request failed', error);
 	});
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	function status(response) {
-		if (response.status >= 200 && response.status < 300) {
-			return Promise.resolve(response);
-		} else {
-			return Promise.reject(new Error(response.statusText));
-		}
-	}
-
-	exports.default = status;
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	function json(response) {
-	  return response.json();
-	}
-
-	exports.default = json;
-
-/***/ },
-/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -139,7 +101,7 @@
 	exports.default = urls;
 
 /***/ },
-/* 4 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -148,23 +110,53 @@
 		value: true
 	});
 
-	var _status = __webpack_require__(1);
+	var _get = __webpack_require__(3);
 
-	var _status2 = _interopRequireDefault(_status);
-
-	var _json = __webpack_require__(2);
-
-	var _json2 = _interopRequireDefault(_json);
+	var _get2 = _interopRequireDefault(_get);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function fetchUrls(data) {
-		return data.forEach(function (url, index) {
-			fetch(url);
+	function users(data) {
+		return data.forEach(function (item, index) {
+			console.log(item);
+			(0, _get2.default)(item);
 		});
 	}
 
-	exports.default = fetchUrls;
+	exports.default = users;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	function get(url) {
+	    return new Promise(function (succeed, fail) {
+	        var req = new XMLHttpRequest();
+
+	        req.open('GET', url, true);
+
+	        req.addEventListener('load', function () {
+	            if (req.status < 400) {
+	                succeed(JSON.parse(req.responseText));
+	            } else {
+	                fail(new Error('Request failed: ' + req.statusText));
+	            }
+	        });
+
+	        req.addEventListener('error', function () {
+	            fail(new Error('Network error'));
+	        });
+
+	        req.send(null);
+	    });
+	}
+
+	exports.default = get;
 
 /***/ }
 /******/ ]);

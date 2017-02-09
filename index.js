@@ -1,26 +1,23 @@
 'use strict';
 
-import status from './src/status';
-import json from './src/json';
 import urls from './src/urls';
-import fetchUrls from './src/fetchUrls';
+import users from './src/users';
+import get from './src/get';
 
 const loc = 'https://api.github.com/search/users?q=location:poland';
 const stars = 'https://api.github.com/search/repositories?q=stars:%3E100&order=desc';
 
-fetch(loc)
-    .then(status)
-    .then(json)
+get(loc)
     .then(function (data) {
         const url = urls(data);
         return url;
     })
     .then(function (url) {
-    	const fetchUrl = fetchUrls(url);
-        return fetchUrl;
+        const user = users(url);
+        return user;	
     })
-    .then(function (fetchUrl) {
-        console.log(fetchUrl);
+    .then(function (user) {
+         console.log(user);
     })
     .catch(function(error) {
       	console.log('Request failed', error);
